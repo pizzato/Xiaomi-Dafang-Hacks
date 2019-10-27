@@ -44,6 +44,11 @@ videoAlerts() {
   $TELEGRAM m "Video alerts on motion detection enabled"
 }
 
+ipAddress() {
+  $TELEGRAM m $(ifconfig wlan0 | awk -F"[: ]+" '/inet addr:/ {print $4}')
+}
+
+
 respond() {
   cmd=$1
   [ $chatId -lt 0 ] && cmd=${1%%@*}
@@ -55,7 +60,8 @@ respond() {
     /textalerts) textAlerts;;
     /imagealerts) imageAlerts;;
     /videoalerts) videoAlerts;;
-    /help | /start) $TELEGRAM m "######### Bot commands #########\n# /mem - show memory information\n# /shot - take a snapshot\n# /on - motion detection on\n# /off - motion detection off\n# /textalerts - Text alerts on motion detection\n# /imagealerts - Image alerts on motion detection\n# /videoalerts - Video alerts on motion detection";;
+    /ipaddress) ipAddress;;
+    /help | /start) $TELEGRAM m "######### Bot commands #########\n# /mem - show memory information\n# /shot - take a snapshot\n# /on - motion detection on\n# /off - motion detection off\n# /textalerts - Text alerts on motion detection\n# /imagealerts - Image alerts on motion detection\n# /videoalerts - Video alerts on motion detection\n# /ipaddress - Obtain camera IP address";;
     *) $TELEGRAM m "I can't respond to '$cmd' command"
   esac
 }
